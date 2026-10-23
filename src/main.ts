@@ -9,6 +9,7 @@ import {
 } from "./scanner/discover-assets";
 import { ScanScopeError } from "./scanner/scan-scope";
 import { PLUGIN_VERSION } from "./version";
+import inlineUiHtml from "virtual:ui-html";
 
 const STORAGE_KEY = "a11y-system-inspector:last-audit";
 
@@ -32,17 +33,14 @@ function storageKey(): string {
 
 const fallbackUi = `<!doctype html>
 <html lang="en">
-  <head><meta charset="utf-8"><title>A11y System Inspector</title></head>
+  <head><meta charset="utf-8"><title>Figma Accesibility Inspector WCAG 2.2</title></head>
   <body style="font-family: system-ui, sans-serif; padding: 16px; line-height: 1.5;">
-    <h1 style="font-size: 15px;">A11y System Inspector</h1>
+    <h1 style="font-size: 15px;">Figma Accesibility Inspector WCAG 2.2</h1>
     <p>The plugin UI file could not be loaded. Run <code>npm run build</code> and re-import <code>manifest.json</code>.</p>
   </body>
 </html>`;
 
-const uiHtml =
-  typeof __html__ === "string" && __html__.trim().length > 0
-    ? __html__
-    : fallbackUi;
+const uiHtml = inlineUiHtml.trim().length > 0 ? inlineUiHtml : fallbackUi;
 
 try {
   figma.showUI(uiHtml, {
@@ -52,9 +50,9 @@ try {
   });
 } catch (error) {
   const message = error instanceof Error ? error.message : String(error);
-  console.error("A11y System Inspector failed to open its UI", error);
+  console.error("Figma Accesibility Inspector WCAG 2.2 failed to open its UI", error);
   figma.notify(
-    `A11y System Inspector could not open its panel: ${message}`,
+    `Figma Accesibility Inspector WCAG 2.2 could not open its panel: ${message}`,
     { error: true, timeout: 15000 },
   );
 }

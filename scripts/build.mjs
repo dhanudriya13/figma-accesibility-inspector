@@ -45,27 +45,63 @@ async function writeUiHtml(outputFiles) {
 
   await mkdir(dist, { recursive: true });
   await writeFile(path.join(dist, "ui.html"), html, "utf8");
+  return html;
 }
 
-const uiHtmlPlugin = {
+const uiHtmlPlugin = (onBuilt) => ({
   name: "inline-ui-html",
   setup(buildContext) {
     buildContext.onEnd(async (result) => {
       if (result.errors.length > 0) return;
       await writeUiHtml(result.outputFiles ?? []);
+      if (onBuilt) await onBuilt();
+    });
+  },
+});
+
+const inlineUiHtmlPlugin = {
+  name: "virtual-ui-html",
+  setup(buildContext) {
+    buildContext.onResolve({ filter: /^virtual:ui-html$/ }, () => ({
+      path: "virtual:ui-html",
+      namespace: "ui-html",
+    }));
+    buildContext.onLoad({ filter: /.*/, namespace: "ui-html" }, async () => {
+      let html = "";
+      try {
+        html = await readFile(path.join(dist, "ui.html"), "utf8");
+      } catch {
+        html = "";
+      }
+      return {
+        contents: `export default ${JSON.stringify(html)};`,
+        loader: "js",
+      };
     });
   },
 };
 
 if (watch) {
   await rm(dist, { recursive: true, force: true });
-  const mainContext = await context(mainOptions);
-  const uiContext = await context({ ...uiOptions, plugins: [uiHtmlPlugin] });
+
+  let mainContext;
+  mainContext = await context({
+    ...mainOptions,
+    plugins: [inlineUiHtmlPlugin],
+  });
+
+  const uiContext = await context({
+    ...uiOptions,
+    plugins: [uiHtmlPlugin(() => mainContext && mainContext.rebuild())],
+  });
+
+  await uiContext.rebuild();
+  await mainContext.rebuild();
   await Promise.all([mainContext.watch(), uiContext.watch()]);
   console.log("Watching src/ for changes. Reload the plugin in Figma to see updates.");
 } else {
   await rm(dist, { recursive: true, force: true });
-  await build(mainOptions);
   const uiResult = await build(uiOptions);
   await writeUiHtml(uiResult.outputFiles);
+  await build({ ...mainOptions, plugins: [inlineUiHtmlPlugin] });
 }

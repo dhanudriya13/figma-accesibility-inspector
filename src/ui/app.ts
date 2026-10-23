@@ -156,7 +156,7 @@ function renderApp(): void {
     <div class="app">
       <header class="app-header">
         <div class="app-title">
-          <h1>A11y System Inspector</h1>
+          <h1>Figma Accesibility Inspector WCAG 2.2</h1>
           <p class="app-subtitle">${docName ? `${escapeHtml(docName)} · ` : ""}WCAG 2.2 AA evidence audit · Local and read-only</p>
         </div>
         <div class="header-actions">

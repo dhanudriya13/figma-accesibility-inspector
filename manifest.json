@@ -1,5 +1,5 @@
 {
-  "name": "A11y System Inspector",
+  "name": "Figma Accesibility Inspector WCAG 2.2",
   "id": "1929313968961922800",
   "api": "1.0.0",
   "main": "dist/code.js",
