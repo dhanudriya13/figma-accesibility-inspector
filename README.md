@@ -1,4 +1,4 @@
-# A11y System Inspector
+# Figma Accesibility Inspector WCAG 2.2
 
 A local-first, open-source Figma plugin that audits existing design assets for WCAG 2.2 AA accessibility issues, with evidence and root-cause tracing.
 
