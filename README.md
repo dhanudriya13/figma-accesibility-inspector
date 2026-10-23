@@ -6,6 +6,11 @@ A local-first, open-source Figma plugin that audits existing design assets for W
 
 The plugin works with mature design systems, partially structured libraries, and standalone UI mockups — without forcing you to adopt a predefined template or answer a setup questionnaire.
 
+## Developed by
+
+- Putu Dhanu Driya | VCD MCUT 110
+- I Nyoman Triarta | VCD MCUT 111
+
 ## Features
 
 - **Adaptive asset discovery** — automatically inventories local variables, collections and modes, paint/text styles, components, variants, instances, frames, and text layers.
@@ -81,6 +86,7 @@ npm install
 1. `npm run build`
 2. Open Figma → **Plugins → Development → Import plugin from manifest…**
 3. Select `manifest.json`
+
 
 ## License
 
