@@ -1199,6 +1199,12 @@ button:disabled {
   flex: 0 0 auto;
 }
 
+.color-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .comparison-ledger {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));

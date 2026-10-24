@@ -31,6 +31,8 @@ export interface AuditFinding {
   threshold?: number | string;
   foregroundColor?: string;
   backgroundColor?: string;
+  fontSize?: number;
+  fontWeight?: number;
 
   evidence: string[];
   confidence: Confidence;

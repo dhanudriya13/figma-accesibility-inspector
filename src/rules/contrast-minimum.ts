@@ -150,6 +150,8 @@ export function runContrastRule(context: RuleContext): AuditFinding[] {
       propertyPath: "fills",
       ...modeFields,
       threshold,
+      fontSize: text.fontSize,
+      fontWeight: text.fontWeight,
       causes,
       estimatedReach: estimateReach(context.model, context.assets, node),
     };

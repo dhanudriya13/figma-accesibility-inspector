@@ -210,6 +210,32 @@ function rootCauseButtons(run: AuditRun, finding: AuditFinding): string {
   `;
 }
 
+function colorCell(label: string, value: string | undefined): string {
+  if (!value) {
+    return `<div><dt>${escapeHtml(label)}</dt><dd class="tabular">${escapeHtml(textOrDash(undefined))}</dd></div>`;
+  }
+  return `
+    <div>
+      <dt>${escapeHtml(label)}</dt>
+      <dd class="color-value">
+        <span class="color-sample" style="background:${escapeHtml(value)}" aria-hidden="true"></span>
+        <span class="tabular">${escapeHtml(value)}</span>
+      </dd>
+    </div>
+  `;
+}
+
+function textSizingCell(finding: AuditFinding): string {
+  if (finding.fontSize === undefined && finding.fontWeight === undefined) {
+    return "";
+  }
+  const size =
+    finding.fontSize !== undefined ? `${finding.fontSize}px` : "Unknown size";
+  const weight =
+    finding.fontWeight !== undefined ? String(finding.fontWeight) : "unknown weight";
+  return `<div><dt>Text size</dt><dd class="tabular">${escapeHtml(`${size} / ${weight}`)}</dd></div>`;
+}
+
 function sources(finding: AuditFinding): string {
   if (finding.causes.length === 0) {
     return `<p class="hint">No variable, style, or component binding was recorded for this property.</p>`;
@@ -270,6 +296,9 @@ function findingRow(run: AuditRun, finding: AuditFinding): string {
             <div><dt>Rule</dt><dd>${escapeHtml(wcag ? `${finding.ruleName} · ${wcag}` : finding.ruleName)}</dd></div>
             <div><dt>Severity</dt><dd>${severityChip(finding.severity)}</dd></div>
             <div><dt>Measured / threshold</dt><dd class="tabular">${escapeHtml(measured)}${finding.threshold !== undefined && typeof finding.threshold === "number" ? ` / ${finding.threshold}:1` : finding.threshold !== undefined ? ` / ${escapeHtml(String(finding.threshold))}` : ""}</dd></div>
+            ${colorCell("Foreground", finding.foregroundColor)}
+            ${colorCell("Background", finding.backgroundColor)}
+            ${textSizingCell(finding)}
             <div><dt>Estimated reach</dt><dd>${escapeHtml(formatReach(finding.estimatedReach))}</dd></div>
             <div><dt>Property</dt><dd>${escapeHtml(textOrDash(finding.propertyPath))}</dd></div>
             <div><dt>Mode</dt><dd>${escapeHtml(formatMode(finding.modeName))}</dd></div>
